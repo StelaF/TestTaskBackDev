@@ -42,7 +42,7 @@ func (s *Server) setupHandlers() *Server {
 
 	s.a.Handler.(*chi.Mux).Route("/api/v1/", func(r chi.Router) {
 		r.Get("/access", s.accessHandler)
-		r.Get("/refresh", s.refreshHandler)
+		r.Post("/refresh", s.refreshHandler)
 	})
 
 	return s
