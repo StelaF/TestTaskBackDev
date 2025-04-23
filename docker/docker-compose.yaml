@@ -26,6 +26,7 @@ services:
       ACCESS_TOKEN_EXP: 5m
       REFRESH_TOKEN_EXP: 1h
       BCRYPT_COST: 6
+      HOST: 1235
     ports:
       - "1235:1235"
 
