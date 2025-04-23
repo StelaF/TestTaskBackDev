@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: auth_postgres
+    environment:
+      POSTGRES_USER: auth_user
+      POSTGRES_PASSWORD: auth_password
+      POSTGRES_DB: auth_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - auth_network
+
+  auth_service:
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+    container_name: auth_service
+    environment:
+      PQ_DSN: host=auth_postgres port=5432 user=auth_user password=auth_password dbname=auth_db sslmode=disable
+      JWT_SECRET: secret
+      ACCESS_TOKEN_EXP: 5m
+      REFRESH_TOKEN_EXP: 1h
+      BCRYPT_COST: 6
+    ports:
+      - "1235:1235"
+
+    networks:
+      - auth_network
+
+volumes:
+  postgres_data:
+
+networks:
+  auth_network:
+    driver: bridge
